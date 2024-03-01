@@ -1,0 +1,9 @@
+/node_modules
+/package
+
+package.zip
+/.env
+
+/package (1)
+
+/build
