@@ -5,9 +5,8 @@ import jwt from 'jsonwebtoken';
 export interface IUser {
     firstname: string;
     lastname: string;
+    middlename: string;
     email: string;
-    dob: Date;
-    phone: number;
     cash: number;
     password: string;
     role: string;
@@ -28,9 +27,8 @@ export interface UserData extends IUser {
 const UserSchema = new Schema<UserData>({
     firstname: {type: String, required: true},
     lastname: {type: String, required: true},
+    middlename: {type: String, required: false},
     email: {type: String, required: true, unique: true},
-    dob: {type: Date, required: true},
-    phone: {type: Number, required: true},
     cash: {type: Number, required: true, default: 0},
     password: {type: String, required: true},
     role: {type: String, enum: ["user", "SuperUser", "admin"], default : "user"}  

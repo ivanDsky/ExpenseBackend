@@ -1,4 +1,6 @@
-import {User, UserData, IUser, UserLogin} from '../models/user';
+import {IUser, User, UserData, UserLogin} from '../models/users/user';
+import {IUserGroup, UserGroup} from "../models/users/usergroup";
+import {UserToUserGroup} from "../models/users/usertousergroup";
 
 export class AuthService{
 	signUp (body: IUser){
@@ -12,6 +14,20 @@ export class AuthService{
                 const user: UserData = await User.create(body);
                 
                 const token = user.getSignedJwtToken();
+
+                const userGroup: IUserGroup = await UserGroup.create(
+                    {
+                        name: body.email,
+                        size: 1,
+                    }
+                )
+
+                await UserToUserGroup.create(
+                    {
+                        user: user,
+                        userGroup: userGroup
+                    }
+                )
 
                 return resolve({user, token});
             }

@@ -1,4 +1,4 @@
-import {User, IUser} from '../models/user';
+import {User, IUser} from '../models/users/user';
 
 
 export class UserService {
