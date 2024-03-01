@@ -7,7 +7,6 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import {userRouter} from "./routes/user.routes";
-import {purchaseRouter} from './routes/purchase.routes';
 import {authRouter} from './routes/auth.routes';
 import {db} from './db';
 import morgan from "morgan";
@@ -36,7 +35,6 @@ app.use(morgan('dev'));
 
 app.use(express.json());
 app.use("/api/users", userRouter);
-app.use("/api/purchase", purchaseRouter);
 app.use("/api/auth", authRouter);
 
 /**

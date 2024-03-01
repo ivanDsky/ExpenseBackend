@@ -7,7 +7,6 @@ export interface IUser {
     lastname: string;
     middlename: string;
     email: string;
-    cash: number;
     password: string;
     role: string;
 }
@@ -29,7 +28,6 @@ const UserSchema = new Schema<UserData>({
     lastname: {type: String, required: true},
     middlename: {type: String, required: false},
     email: {type: String, required: true, unique: true},
-    cash: {type: Number, required: true, default: 0},
     password: {type: String, required: true},
     role: {type: String, enum: ["user", "SuperUser", "admin"], default : "user"}  
 },
