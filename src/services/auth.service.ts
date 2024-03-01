@@ -19,6 +19,7 @@ export class AuthService{
                     {
                         name: body.email,
                         size: 1,
+                        owner: user,
                     }
                 )
 

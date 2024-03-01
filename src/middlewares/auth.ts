@@ -35,7 +35,7 @@ export const protect = async(req: Request, res: Response, next: NextFunction) =>
 
 }
 
-export const isAccountOwner = async(req: Request, res: Response, next: NextFunction) => {
+export const isGroupOwner = async(req: Request, res: Response, next: NextFunction) => {
 
 	const token = req.header('x-auth-token');
 

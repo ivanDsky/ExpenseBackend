@@ -1,4 +1,6 @@
 import {User, IUser} from '../models/users/user';
+import {IUserGroup, UserGroup} from "../models/users/usergroup";
+import {UserToUserGroup} from "../models/users/usertousergroup";
 
 
 export class UserService {
@@ -6,6 +8,22 @@ export class UserService {
         return new Promise(async(resolve, reject) => {
             try{
                 const user = await User.create(body);
+
+                const userGroup: IUserGroup = await UserGroup.create(
+                    {
+                        name: body.email,
+                        size: 1,
+                        owner: user,
+                    }
+                )
+
+                await UserToUserGroup.create(
+                    {
+                        user: user,
+                        userGroup: userGroup
+                    }
+                )
+
                 return resolve(user);
             }
             catch (e: any){
