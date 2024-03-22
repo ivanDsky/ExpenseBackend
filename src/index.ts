@@ -10,6 +10,8 @@ import {userRouter} from "./routes/user.routes";
 import {authRouter} from './routes/auth.routes';
 import {db} from './db';
 import morgan from "morgan";
+import {expenseRouter} from "./routes/expense.routes";
+import {categoryRouter} from "./routes/category.routes";
 
 dotenv.config();
 db();
@@ -36,6 +38,8 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/expenses", expenseRouter);
+app.use("/api/categories", categoryRouter);
 
 /**
  * Server Activation

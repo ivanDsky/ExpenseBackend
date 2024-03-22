@@ -1,11 +1,11 @@
-import {IUser} from "./user";
+import {UserData} from "./user";
 import {model, Schema} from "mongoose";
 import mongoose from "mongoose";
-import {IUserGroup} from "./usergroup";
+import {UserGroupData} from "./usergroup";
 
 export interface IUserToUserGroup {
-    user: IUser,
-    userGroup: IUserGroup,
+    user: UserData,
+    userGroup: UserGroupData,
 }
 
 const UserToUserGroupSchema = new Schema<IUserToUserGroup>({

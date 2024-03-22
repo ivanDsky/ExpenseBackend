@@ -16,5 +16,11 @@ const UserGroupSchema = new Schema<IUserGroup>({
         timestamps: true
     });
 
+UserGroupSchema.set('toJSON', {
+    transform: function (doc, ret) {
+        delete ret.__v;
+    }
+});
+
 
 export const UserGroup = model<IUserGroup>('UserGroup', UserGroupSchema)

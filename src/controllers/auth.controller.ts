@@ -30,8 +30,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) =>{
         return res.status(201).json({user, token});
     }  
     catch(e: any) {
-            return res.status(e.status).json({success: false, message: e.message})    
-    
-        
+
+        return res.status(e.status).json({success: false, message: e.message})
     }
 }

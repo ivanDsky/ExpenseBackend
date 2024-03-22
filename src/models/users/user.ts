@@ -1,6 +1,8 @@
 import {model, Schema} from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import {UserToUserGroup} from "./usertousergroup";
+import {UserGroup} from "./usergroup";
 
 export interface IUser {
     firstname: string;
@@ -18,7 +20,7 @@ export interface UserLogin {
 }
 
 export interface UserData extends IUser {
-    getSignedJwtToken : () => string;
+    getSignedJwtToken : () => Promise<string>;
     matchPassword : () => string;    
 }
 
@@ -29,7 +31,7 @@ const UserSchema = new Schema<UserData>({
     middlename: {type: String, required: false},
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
-    role: {type: String, enum: ["user", "SuperUser", "admin"], default : "user"}  
+    role: {type: String, enum: ["user", "admin"], default : "user"}
 },
 {
     timestamps: true
@@ -46,8 +48,10 @@ UserSchema.pre('save', async function(next){
 });
 
 // For Session Mgt -> Create a method that creates a Signed JWT using the user id for session Mgt
-UserSchema.methods.getSignedJwtToken = function() {
-    return jwt.sign( {id: this._id}, process.env.JWT_SECRET!, {
+UserSchema.methods.getSignedJwtToken = async function() {
+    const userId = this._id
+    const userGroup = await UserGroup.findOne({owner: this})
+    return jwt.sign( {id: userId, groupId: userGroup!!._id}, process.env.JWT_SECRET!, {
         expiresIn: process.env.JWT_EXPIRE
     })
 }
@@ -56,6 +60,13 @@ UserSchema.methods.getSignedJwtToken = function() {
 UserSchema.methods.matchPassword = async function(enteredPassword: string ){
     return await bcrypt.compare(enteredPassword, this.password);
 }
+
+UserSchema.set('toJSON', {
+    transform: function (doc, ret) {
+        delete ret.__v;
+    }
+});
+
 
 
 export const User = model<UserData>('User', UserSchema)

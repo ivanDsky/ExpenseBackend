@@ -12,8 +12,6 @@ export class AuthService{
                     return reject({code : 400, message: "User Exist!"})
                 }
                 const user: UserData = await User.create(body);
-                
-                const token = user.getSignedJwtToken();
 
                 const userGroup: IUserGroup = await UserGroup.create(
                     {
@@ -22,6 +20,8 @@ export class AuthService{
                         owner: user,
                     }
                 )
+
+                const token = await user.getSignedJwtToken();
 
                 await UserToUserGroup.create(
                     {
@@ -58,7 +58,7 @@ export class AuthService{
 
                 user.password = undefined;
 
-                const token: string = user.getSignedJwtToken();
+                const token: string = await user.getSignedJwtToken();
 
                 if(!token) reject ('Could not Sign In User');
                 
