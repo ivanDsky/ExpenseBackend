@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 import {ICategory} from "../categories/category";
 import {IUserGroup} from "../users/usergroup";
+import paginate from "mongoose-paginate-v2";
 
 export interface IExpense extends Document {
     userGroup: IUserGroup,
@@ -20,6 +21,8 @@ const ExpenseSchema: Schema = new Schema({
     date: { type: Date, default: Date.now },
 });
 
+ExpenseSchema.plugin(paginate)
+
 // Define the transformation function to exclude fields
 ExpenseSchema.set('toJSON', {
     transform: function (doc, ret) {
@@ -30,4 +33,4 @@ ExpenseSchema.set('toJSON', {
     }
 });
 
-export const Expense = mongoose.model<IExpense>('Expense', ExpenseSchema);
+export const Expense = mongoose.model<IExpense, mongoose.PaginateModel<IExpense>>('Expense', ExpenseSchema);

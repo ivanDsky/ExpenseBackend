@@ -50,33 +50,42 @@ export class ExpenseService {
         });
     }
 
-    getExpensesByCategory(categoryId: string): Promise<IExpense[]> {
+    getExpensesByCategory(categoryId: string, page: number, limit: number): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
-                const expenses = await Expense.find({ category: categoryId }).populate("category");
-                resolve(expenses);
+                const options = { page, limit, populate: {path: 'category'}}
+                await Expense.paginate({ category: categoryId }, options, function (err, result) {
+                    if (err) reject({status: 404, message: 'Expenses not found.'});
+                    else resolve(result)
+                })
             } catch (error) {
                 reject({ status: 404, message: 'Expenses not found.' });
             }
         });
     }
 
-    getExpensesByDateRange(startDate: Date, endDate: Date): Promise<IExpense[]> {
+    getExpensesByDateRange(startDate: Date, endDate: Date, page: number, limit: number): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
-                const expenses = await Expense.find({ date: { $gte: startDate, $lte: endDate } }).populate("category");
-                resolve(expenses);
+                const options = { page, limit, populate: {path: 'category'}}
+                await Expense.paginate({ date: { $gte: startDate, $lte: endDate } }, options, function (err, result) {
+                    if (err) reject({status: 404, message: 'Expenses not found.'});
+                    else resolve(result)
+                })
             } catch (error) {
                 reject({ status: 404, message: 'Expenses not found.' });
             }
         });
     }
 
-    getAllExpenses(): Promise<IExpense[]> {
+    getAllExpenses(page: number, limit: number): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
-                const expenses = await Expense.find().populate("category");
-                resolve(expenses);
+                const options = { page, limit, populate: {path: 'category'}}
+                await Expense.paginate({}, options, function (err, result) {
+                    if (err) reject({status: 404, message: 'Expenses not found.'});
+                    else resolve(result)
+                })
             } catch (error) {
                 reject({ status: 404, message: 'Expenses not found.' });
             }

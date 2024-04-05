@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { CategoryService } from '../services/category.service';
+import {PaginationParameters} from "mongoose-paginate-v2";
 
 const categoryService = new CategoryService();
 
@@ -54,7 +55,8 @@ export const getCategoryById = async (req: Request, res: Response): Promise<void
 
 export const getAllCategories = async (req: Request, res: Response): Promise<void> => {
     try {
-        const categories = await categoryService.getAllCategories();
+        const {page, limit} = req.query
+        const categories = await categoryService.getAllCategories(parseInt((page as string) || "1"), parseInt((limit as string) || "10"));
         res.json(categories);
     } catch (error: any) {
         res.status(error.status || 500).json({ message: error.message });

@@ -52,8 +52,9 @@ export const getExpenseById = async (req: Request, res: Response) => {
 
 export const getExpensesByCategory = async (req: Request, res: Response) => {
     const { categoryId } = req.params;
+    const {page, limit} = req.query;
     try {
-        const expenses = await expenseService.getExpensesByCategory(categoryId);
+        const expenses = await expenseService.getExpensesByCategory(categoryId, parseInt((page as string) || "1"), parseInt((limit as string) || "10"));
         return res.json(expenses);
     } catch (error: any) {
         return res.status(error.status || 500).json({ message: error.message });
@@ -61,9 +62,10 @@ export const getExpensesByCategory = async (req: Request, res: Response) => {
 }
 
 export const getExpensesByDateRange = async (req: Request, res: Response) => {
-    const { startDate, endDate } = req.query;
+    const { startDate, endDate,page, limit } = req.query;
     try {
-        const expenses = await expenseService.getExpensesByDateRange(new Date(startDate as string), new Date(endDate as string));
+        const expenses = await expenseService.getExpensesByDateRange(new Date(startDate as string), new Date(endDate as string),
+            parseInt((page as string) || "1"), parseInt((limit as string) || "10"));
         return res.json(expenses);
     } catch (error: any) {
         return res.status(error.status || 500).json({ message: error.message });
@@ -71,8 +73,9 @@ export const getExpensesByDateRange = async (req: Request, res: Response) => {
 }
 
 export const getAllExpenses = async (req: Request, res: Response) => {
+    const {page, limit} = req.query
     try {
-        const expenses = await expenseService.getAllExpenses();
+        const expenses = await expenseService.getAllExpenses(parseInt((page as string) || "1"), parseInt((limit as string) || "10"));
         return res.json(expenses);
     } catch (error: any) {
         return res.status(error.status || 500).json({ message: error.message });

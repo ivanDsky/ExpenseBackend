@@ -1,5 +1,6 @@
-import {model, Schema} from 'mongoose';
+import mongoose, {model, Schema} from 'mongoose';
 import {IUserGroup} from "../users/usergroup";
+import paginate from 'mongoose-paginate-v2';
 
 export interface ICategory {
     userGroup: IUserGroup,
@@ -13,6 +14,8 @@ const CategoryScheme = new Schema<ICategory>({
         color: {type: String, required: true},
     });
 
+CategoryScheme.plugin(paginate)
+
 // Define the transformation function to exclude fields
 CategoryScheme.set('toJSON', {
     transform: function (doc, ret) {
@@ -20,4 +23,4 @@ CategoryScheme.set('toJSON', {
     }
 });
 
-export const Category = model<ICategory>('Category', CategoryScheme)
+export const Category = model<ICategory, mongoose.PaginateModel<ICategory>>('Category', CategoryScheme)

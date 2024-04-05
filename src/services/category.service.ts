@@ -46,11 +46,13 @@ export class CategoryService {
         });
     }
 
-    getAllCategories(): Promise<ICategory[]> {
+    getAllCategories(page: number, limit: number): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
-                const categories = await Category.find();
-                resolve(categories);
+                await Category.paginate({}, {page, limit}, function (err, result) {
+                    if (err) reject({status: 404, message: 'Categories not found.'});
+                    else resolve(result)
+                })
             } catch (error) {
                 reject({ status: 404, message: 'Categories not found.' });
             }
