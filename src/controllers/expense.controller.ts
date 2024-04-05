@@ -6,7 +6,7 @@ const expenseService = new ExpenseService();
 export const createExpense = async (req: Request, res: Response) => {
     const { amount, description, category, date, recurrence } = req.body;
     try {
-        const expense = await expenseService.createExpense((req as any).userGroup, amount, description, recurrence, category, date);
+        const expense = await expenseService.createExpense((req as any).userGroup, amount, description, recurrence, category, new Date(date));
         return res.status(201).json(expense);
     } catch (error: any) {
         return res.status(error.status || 500).json({ message: error.message });
